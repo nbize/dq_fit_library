@@ -4,14 +4,13 @@ import json
 import sys
 import argparse
 from array import array
+import os
 from os import path
 import ROOT
 from ROOT import TFile, TF1, TH1F, TTree
 from ROOT import gRandom
 sys.path.append('../')
 from DQFitter import DQFitter
-sys.path.append('../utils')
-from utils_library import DoSystematics
 
 def GenerateTutorialSample():
     print("----------- GENERATE TUTORIAL SAMPLE -----------")
@@ -73,15 +72,15 @@ def GenerateTutorialSample():
     print("counter Psi(2S) = %f" % (counterSig2))
 
 def main():
+    print('start')
     parser = argparse.ArgumentParser(description='Arguments to pass')
     parser.add_argument('cfgFileName', metavar='text', default='config.yml', help='config file name')
     parser.add_argument("--gen_tutorial", help="generate tutorial sample", action="store_true")
     parser.add_argument("--do_fit", help="run the multi trial", action="store_true")
-    parser.add_argument("--do_systematics", help="do systematic on signal extraction", action="store_true")
-    parser.add_argument("--optimize_fit", help="optimize the fit parameters", action="store_true")
     args = parser.parse_args()
-
+    print(args)
     print('Loading task configuration: ...', end='\r')
+
     with open(args.cfgFileName, 'r') as jsonCfgFile:
         inputCfg = json.load(jsonCfgFile)
         #inputCfg = yaml.load(jsonCfgFile, yaml.FullLoader)
@@ -91,17 +90,13 @@ def main():
         GenerateTutorialSample()
     
     if args.do_fit:
-        dqFitter = DQFitter(inputCfg["input"]["input_file_name"], inputCfg["input"]["input_name"], inputCfg["output"]["output_file_name"])
-        dqFitter.SetFitConfig(inputCfg["input"]["pdf_dictionary"])
-        dqFitter.MultiTrial()
+        if not path.isdir(inputCfg["output"]["output_file_name"]):
+            os.system("mkdir -p %s" % (inputCfg["output"]["output_file_name"]))
+        for histName in inputCfg["input"]["input_name"]:
+            dqFitter = DQFitter(inputCfg["input"]["input_file_name"], histName, inputCfg["output"]["output_file_name"], 2, 5)
+            dqFitter.SetFitConfig(inputCfg["input"]["pdf_dictionary"])
+            dqFitter.MultiTrial()
 
-    if args.do_systematics:
-        fIn = TFile.Open("FitResults.root")
-        DoSystematics(fIn, "sig_Jpsi")
 
-    if args.optimize_fit:
-        dqFitter = DQFitter(inputCfg["input"]["input_file_name"], inputCfg["input"]["input_name"], inputCfg["output"]["output_file_name"])
-        dqFitter.SetFitConfig(inputCfg["input"]["pdf_dictionary"])
-        dqFitter.OptimizeFit()
-
-main()
+if __name__ == '__main__':
+    main()
