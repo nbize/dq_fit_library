@@ -107,5 +107,60 @@ def DoSystematics(fIn, parName):
 
     input()
 
+def CheckVariables(fInNames, parNames, xMin, xMax, fOutName):
+    '''
+    Method to chech the variable evolution vs file in the list
+    '''
+    LoadStyle()
+    gStyle.SetOptStat(0)
+    gStyle.SetOptFit(0)
+
+    xBins  = array( 'f', [] )
+    xCentr  = array( 'f', [] )
+    xError = array( 'f', [] )
+
+    for i in range(0, len(xMin)):
+        xCentr.append((xMax[i] + xMin[i]) / 2.)
+        xError.append((xMax[i] - xMin[i]) / 2.)
+        xBins.append(xMin[i])
+    xBins.append(xMax[len(xMin)-1])
+    
+
+    fOut = TFile("{}myAnalysis.root".format(fOutName), "RECREATE")
+
+    for parName in parNames:
+        parValArray  = array( 'f', [] )
+        parErrArray = array( 'f', [] )
+        for fInName in fInNames:
+            fIn = TFile.Open(fInName)
+            for key in fIn.GetListOfKeys():
+                kname = key.GetName()
+                if "fit_results" in fIn.Get(kname).GetName():
+                    parValArray.append(fIn.Get(kname).GetBinContent(fIn.Get(kname).GetXaxis().FindBin(parName)))
+                    parErrArray.append(fIn.Get(kname).GetBinError(fIn.Get(kname).GetXaxis().FindBin(parName)))
+        
+        histParVal = TH1F("hist_{}".format(parName), "", len(xMin), xBins)
+
+        for i in range(0, len(xMin)):
+            histParVal.SetBinContent(i+1, parValArray[i])
+            histParVal.SetBinError(i+1, parErrArray[i])
+
+        graParVal = TGraphErrors(len(parValArray), xCentr, parValArray, xError, parErrArray)
+        graParVal.SetMarkerStyle(24)
+        graParVal.SetMarkerSize(1.2)
+        graParVal.SetMarkerColor(kBlack)
+        graParVal.SetLineColor(kBlack)
+
+        fOut.cd()
+        histParVal.Write("hist_{}".format(parName))
+        graParVal.Write("gra_{}".format(parName))
+
+    
+
+    #canvasParVal = TCanvas("canvasParVal", "canvasParVal", 800, 600)
+    #histGrid = TH2F("histGrid", "", 100, xMin[0], xMax[len(xMax)-1], 100, 0.7 * min(parValArray), 1.3 * max(parValArray))
+    #histGrid.Draw("same")
+    #graParVal.Draw("EPsame")
+
 
     
