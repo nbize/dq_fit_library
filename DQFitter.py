@@ -1,11 +1,11 @@
 from telnetlib import DO
 import ROOT
-from ROOT import TCanvas, TFile, TH1F, TPaveText, TLatex, RooRealVar, RooDataSet, RooWorkspace, RooDataHist, RooArgSet
-from ROOT import gPad, gROOT, gStyle, kRed, kBlue, kGreen
+from ROOT import TCanvas, TFile, TH1F, TPaveText, RooRealVar, RooDataSet, RooWorkspace, RooDataHist, RooArgSet
+from ROOT import gPad, gROOT
 from utils.plot_library import DoResidualPlot, DoPullPlot, DoCorrMatPlot, DoAlicePlot, LoadStyle
 
 class DQFitter:
-    def __init__(self, fInName, fInputName, fOutPath):
+    def __init__(self, fInName, fInputName, fOutPath, minDatasetRange, maxDatasetRange):
         self.fPdfDict          = {}
         self.fOutPath          = fOutPath
         self.fFileOut          = TFile("{}{}.root".format(fOutPath, fInputName), "RECREATE")
@@ -18,9 +18,11 @@ class DQFitter:
         self.fFitRangeMin      = []
         self.fFitRangeMax      = []
         self.fTrialName        = ""
-        self.fRooMass          = RooRealVar("m", "#it{M} (GeV/#it{c}^{2})", 7, 12)
-        self.fDoResidualPlot   = True
-        self.fDoPullPlot       = True
+        self.fMinDatasetRange  = minDatasetRange
+        self.fMaxDatasetRange  = maxDatasetRange
+        self.fRooMass          = RooRealVar("m", "#it{M} (GeV/#it{c}^{2})", self.fMinDatasetRange, self.fMaxDatasetRange)
+        self.fDoResidualPlot   = False
+        self.fDoPullPlot       = False
         self.fDoCorrMatPlot    = False
 
     def SetFitConfig(self, pdfDict):
@@ -29,8 +31,8 @@ class DQFitter:
         '''
         self.fPdfDict = pdfDict
         self.fInput = self.fFileIn.Get(self.fInputName)
-        self.fInput.Sumw2()
-        self.fFitMethod = pdfDict["fitMethod"]
+        if not "TTree" in self.fInput.ClassName():
+            self.fInput.Sumw2()
         self.fFitRangeMin = pdfDict["fitRangeMin"]
         self.fFitRangeMax = pdfDict["fitRangeMax"]
         self.fDoResidualPlot = pdfDict["doResidualPlot"]
@@ -49,7 +51,14 @@ class DQFitter:
             parLimMin = self.fPdfDict["parLimMin"][i]
             parLimMax = self.fPdfDict["parLimMax"][i]
             parName = self.fPdfDict["parName"][i]
-            parFix = self.fPdfDict["parFix"][i]
+
+            if not len(parVal) == len(parLimMin) == len(parLimMax) == len(parName):
+                print("WARNING! Different size if the input parameters in the configuration")
+                print(parVal)
+                print(parLimMin)
+                print(parLimMax)
+                print(parName)
+                exit()
 
             if not self.fPdfDict["pdf"][i] == "SUM":
                 # Filling parameter list
@@ -60,10 +69,10 @@ class DQFitter:
                         r1 = parName[j].find("::") + 2
                         r2 = parName[j].find("(", r1)
                         parName[j] = parName[j][r1:r2]
-                        if (parFix[j] == True):
+                        if (parLimMin[j] == parLimMax[j]):
                             self.fRooWorkspace.factory("{}[{}]".format(parName[j], parVal[j]))
                     else:
-                        if (parFix[j] == True):
+                        if (parLimMin[j] == parLimMax[j]):
                             self.fRooWorkspace.factory("{}[{}]".format(parName[j], parVal[j]))
                         else:
                             self.fRooWorkspace.factory("{}[{},{},{}]".format(parName[j], parVal[j], parLimMin[j], parLimMax[j]))
@@ -104,7 +113,6 @@ class DQFitter:
         if "TTree" in self.fInput.ClassName():
             print("########### Perform unbinned fit ###########")
             rooDs = RooDataSet("data", "data", RooArgSet(self.fRooMass), ROOT.RooFit.Import(self.fInput))
-            
         else:
             print("########### Perform binned fit ###########")
             rooDs = RooDataHist("data", "data", RooArgSet(self.fRooMass), ROOT.RooFit.Import(self.fInput))
@@ -115,7 +123,7 @@ class DQFitter:
             rooFitRes = ROOT.RooFitResult(pdf.fitTo(rooDs, ROOT.RooFit.Range(fitRangeMin,fitRangeMax),ROOT.RooFit.PrintLevel(-1), ROOT.RooFit.Save()))
         if fitMethod == "chi2":
             print("########### Perform X2 fit ###########")
-            rooFitRes = ROOT.RooFitResult(pdf.chi2FitTo(rooDs, ROOT.RooFit.Save()))
+            rooFitRes = ROOT.RooFitResult(pdf.chi2FitTo(rooDs, ROOT.RooFit.Range(fitRangeMin,fitRangeMax),ROOT.RooFit.PrintLevel(-1), ROOT.RooFit.Save()))
 
         index = 1
         histResults = TH1F("fit_results_{}".format(trialName), "fit_results_{}".format(trialName), len(self.fParNames), 0., len(self.fParNames))
@@ -153,21 +161,33 @@ class DQFitter:
                     (paveText.GetListOfLines().Last()).SetTextColor(self.fPdfDict["pdfColor"][i])
 
 
-
-        #Fit with RooChi2Var
-        # To Do : Find a way to get the number of bins differently. The following is a temparary solution.
-        # WARNING : The largest fit range has to come first in the config file otherwise it does not work
-        nbinsperGev = rooDs.numEntries() / (self.fPdfDict["fitRangeMax"][0] - self.fPdfDict["fitRangeMin"][0])
-        #nBins = fRooPlot.GetXaxis().FindBin(fitRangeMax) - fRooPlot.GetXaxis().FindBin(fitRangeMin)
-        nBins = (fitRangeMax - fitRangeMin)*nbinsperGev
-       
-        chi2 = ROOT.RooChi2Var("chi2", "chi2", pdf, rooDs)
-        nPars = rooFitRes.floatParsFinal().getSize()
-        ndof = nBins - nPars
-        reduced_chi2 = chi2.getVal() / ndof
+        reduced_chi2 = 0
+        if "TTree" in self.fInput.ClassName():
+            #Fit with RooChi2Var
+            # To Do : Find a way to get the number of bins differently. The following is a temparary solution.
+            # WARNING : The largest fit range has to come first in the config file otherwise it does not work
+            # Convert unbinned dataset into binned dataset
+            rooDsBinned = RooDataHist("rooDsBinned","binned version of rooDs",RooArgSet(self.fRooMass),rooDs)
+            nbinsperGev = rooDsBinned.numEntries() / (self.fPdfDict["fitRangeMax"][0] - self.fPdfDict["fitRangeMin"][0])
+            nBins = (fitRangeMax - fitRangeMin) * nbinsperGev
         
+            chi2 = ROOT.RooChi2Var("chi2", "chi2", pdf, rooDsBinned)
+            nPars = rooFitRes.floatParsFinal().getSize()
+            ndof = nBins - nPars
+            reduced_chi2 = chi2.getVal() / ndof
+        else:
+            #Fit with RooChi2Var
+            # To Do : Find a way to get the number of bins differently. The following is a temparary solution.
+            # WARNING : The largest fit range has to come first in the config file otherwise it does not work
+            nbinsperGev = rooDs.numEntries() / (self.fPdfDict["fitRangeMax"][0] - self.fPdfDict["fitRangeMin"][0])
+            nBins = (fitRangeMax - fitRangeMin) * nbinsperGev
+        
+            chi2 = ROOT.RooChi2Var("chi2", "chi2", pdf, rooDs)
+            nPars = rooFitRes.floatParsFinal().getSize()
+            ndof = nBins - nPars
+            reduced_chi2 = chi2.getVal() / ndof
 
-       
+        
         # Add the chiSquare value
         paveText.AddText("n Par = %3.2f" % (nPars)) 
         paveText.AddText("n Bins = %3.2f" % (nBins))
@@ -176,8 +196,6 @@ class DQFitter:
         fRooPlot.addObject(paveText)
         extraText.append("#chi^{2}/dof = %3.2f" % reduced_chi2)
      
-
-
         # Fit plot
         canvasFit = TCanvas("fit_plot_{}".format(trialName), "fit_plot_{}".format(trialName), 800, 600)
         canvasFit.SetLeftMargin(0.15)
