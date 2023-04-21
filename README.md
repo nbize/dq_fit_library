@@ -12,11 +12,3 @@ This python class is based on RooFit and allows to perform binned and unbinned f
   ```
 For validation of the code use the reference:
 - [Analysis note Jpsi & Psi2S](https://alice-notes.web.cern.ch/system/files/notes/analysis/1216/2022-10-26-AN_Psi2S_v3.pdf)
-
-## QC macro
-This macro can be used to produce control plots reading the O2 DQ tableMaker and tableReader.In addition it extracts basic J/psi
-basic features (mass position and width) using the DQ fit library
-
-In the root environment run with:
-* **.x DQFitter.cxx+**
-* **.x run_qc.C++**
