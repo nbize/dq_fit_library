@@ -69,8 +69,7 @@ class DQFitter:
                         r1 = parName[j].find("::") + 2
                         r2 = parName[j].find("(", r1)
                         parName[j] = parName[j][r1:r2]
-                        if (parLimMin[j] == parLimMax[j]):
-                            self.fRooWorkspace.factory("{}[{}]".format(parName[j], parVal[j]))
+                        self.fRooWorkspace.factory("{}[{}]".format(parName[j], parVal[j]))
                     else:
                         if (parLimMin[j] == parLimMax[j]):
                             self.fRooWorkspace.factory("{}[{}]".format(parName[j], parVal[j]))
@@ -218,12 +217,12 @@ class DQFitter:
 
         # Ratio plot
         if self.fDoResidualPlot:
-            canvasRatio = DoResidualPlot(fRooPlot, self.fRooMass, trialName)
+            canvasRatio = DoResidualPlot(fRooPlotOff, self.fRooMass, trialName)
             canvasRatio.Write()
 
         # Pull plot
         if self.fDoPullPlot:
-            canvasPull = DoPullPlot(fRooPlot, self.fRooMass, trialName)
+            canvasPull = DoPullPlot(fRooPlotOff, self.fRooMass, trialName)
             canvasPull.Write()
 
         # Correlation matrix plot

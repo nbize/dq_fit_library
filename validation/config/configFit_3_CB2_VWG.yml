@@ -1,7 +1,7 @@
 {
   "input": {
     "input_file_name": "SumHistos_161718.root",
-    "input_name": "hMassOS_CMUL7",
+    "input_name": ["hMassOS_CMUL7"],
     "pdf_dictionary": {
       "pdf": ["CB2", "CB2", "CB2", "VWG", "SUM"],
       "pdfName": ["Upsilon1s", "Upsilon2s", "Upsilon3s", "Bkg", "SUM"],
@@ -59,8 +59,6 @@
     }
   },
   "output": {
-    
-    
-    "output_file_name": "/Users/valencia/Desktop/dq_fit_library/validation/output/"
+    "output_file_name": "validation_output/"
   }
 }

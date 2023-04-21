@@ -1,7 +1,7 @@
 {
   "input": {
     "input_file_name": "dimuon_LHC2017.root",
-    "input_name": "hInvMassPt02",
+    "input_name": ["hInvMassPt02"],
     "pdf_dictionary": {
       "pdf": ["CB2", "CB2", "VWG", "SUM"],
       "pdfName": ["Jpsi", "Psi2s", "Bkg", "SUM"],
@@ -54,8 +54,6 @@
     }
   },
   "output": {
-    
-    
-    "output_file_name": "/Users/valencia/Desktop/dq_fit_library/validation/output/"
+    "output_file_name": "output_validation/"
   }
 }
