@@ -219,7 +219,7 @@ class DQFitter:
 
         # Ratio plot
         if self.fDoResidualPlot:
-            canvasResidual = DoResidualPlot(fRooPlotOff, self.fRooMass, trialName)
+            canvasResidual = DoResidualPlot(fRooPlotOff, self.fRooMass, trialName) 
             canvasResidual.Write()
 
         # Pull plot
