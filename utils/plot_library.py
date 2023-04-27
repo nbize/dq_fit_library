@@ -71,14 +71,14 @@ def DrawRatioPlot(hist1, hist2, dirName, plotName):
 
 
 def DoResidualPlot(rooPlot, rooVar, trialName):
-    rooHistRatio = rooPlot.residHist()
-    rooPlotRatio = rooVar.frame(ROOT.RooFit.Title("Residual Distribution"))
-    rooPlotRatio.addPlotable(rooHistRatio,"P")
-    canvasRatio = TCanvas("ratio_plot_{}".format(trialName), "ratio_plot_{}".format(trialName), 600, 600)
-    canvasRatio.SetLeftMargin(0.15)
-    rooPlotRatio.GetYaxis().SetTitleOffset(1.4)
-    rooPlotRatio.Draw()
-    return canvasRatio
+    rooHistResidual = rooPlot.residHist()
+    rooPlotResidual = rooVar.frame(ROOT.RooFit.Title("Residual Distribution"))
+    rooPlotResidual.addPlotable(rooHistResidual,"P")
+    canvasResidual = TCanvas("residual_plot_{}".format(trialName), "resisual_plot_{}".format(trialName), 600, 600)
+    canvasResidual.SetLeftMargin(0.15)
+    rooPlotResidual.GetYaxis().SetTitleOffset(1.4)
+    rooPlotResidual.Draw()
+    return canvasResidual
 
 def DoPullPlot(rooPlot, rooVar, trialName):
     rooHistPull = rooPlot.pullHist()
