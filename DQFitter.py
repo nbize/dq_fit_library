@@ -108,7 +108,7 @@ class DQFitter:
         pdf = self.fRooWorkspace.pdf("sum")
         self.fRooMass.setRange("range", fitRangeMin, fitRangeMax)
         fRooPlot = self.fRooMass.frame(ROOT.RooFit.Title(trialName), ROOT.RooFit.Range("range"))
-
+        fRooPlotExtra = self.fRooMass.frame(ROOT.RooFit.Title(trialName), ROOT.RooFit.Range("range"))
         fRooPlotOff = self.fRooMass.frame(ROOT.RooFit.Title(trialName))
         if "TTree" in self.fInput.ClassName():
             print("########### Perform unbinned fit ###########")
@@ -203,7 +203,6 @@ class DQFitter:
         gPad.SetLeftMargin(0.15)
         fRooPlot.GetYaxis().SetTitleOffset(1.4)
         fRooPlot.Draw()
-        #fRooPlot.Print("V")
         
         # Print the fit result
         rooFitRes.Print()
@@ -217,14 +216,17 @@ class DQFitter:
         histResults.Write()
         canvasFit.Write()
 
-        # Ratio plot
+        rooDs.plotOn(fRooPlotExtra, ROOT.RooFit.DataError(ROOT.RooAbsData.SumW2), ROOT.RooFit.Range(fitRangeMin, fitRangeMax))
+        pdf.plotOn(fRooPlotExtra, ROOT.RooFit.Range(fitRangeMin, fitRangeMax))
+
+        # Residual plot
         if self.fDoResidualPlot:
-            canvasResidual = DoResidualPlot(fRooPlotOff, self.fRooMass, trialName) 
+            canvasResidual = DoResidualPlot(fRooPlotExtra, self.fRooMass, trialName)
             canvasResidual.Write()
 
         # Pull plot
         if self.fDoPullPlot:
-            canvasPull = DoPullPlot(fRooPlotOff, self.fRooMass, trialName)
+            canvasPull = DoPullPlot(fRooPlotExtra, self.fRooMass, trialName)
             canvasPull.Write()
 
         # Correlation matrix plot
