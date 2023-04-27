@@ -34,7 +34,7 @@ def main():
         if not path.isdir(inputCfg["output"]["output_file_name"]):
             os.system("mkdir -p %s" % (inputCfg["output"]["output_file_name"]))
         for histName in inputCfg["input"]["input_name"]:
-            dqFitter = DQFitter(inputCfg["input"]["input_file_name"], histName, inputCfg["output"]["output_file_name"], 6, 15)
+            dqFitter = DQFitter(inputCfg["input"]["input_file_name"], histName, inputCfg["output"]["output_file_name"], 2, 5)
             #dqFitter = DQFitter(inputCfg["input"]["input_file_name"], inputCfg["input"]["input_name"], inputCfg["output"]["output_file_name"])
             dqFitter.SetFitConfig(inputCfg["input"]["pdf_dictionary"])
             dqFitter.MultiTrial()

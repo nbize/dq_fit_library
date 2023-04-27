@@ -34,7 +34,6 @@
       ],
       "fitRangeMin": [2],
       "fitRangeMax": [5],
-      "fitMethod": "likelyhood",
       "doResidualPlot": true,
       "doPullPlot": true, 
       "doCorrMatPlot": true,
