@@ -1,0 +1,65 @@
+{
+  "input": {
+    "input_file_name": "/Users/nicolasbize/alice/fresh-analysis/Analysis_Data/psi2sToJpsi/LHC22o_medium_apass4/differential_pT.root",
+    "input_name": ["pt_0_1","pt_1_2","pt_2_3","pt_3_4","pt_4_5","pt_5_7","pt_7_10","pt_10_20"],
+    "pdf_dictionary": {
+      "pdf": ["CB2", "CB2", "VWG", "SUM"],
+      "pdfName": ["Jpsi", "Psi2s", "Bkg", "SUM"],
+      "pdfColor": [861, 417, 1],
+      "pdfNameForLegend": ["J/#psi", "#psi(2S)","Background", "Total Fit"],
+      "pdfStyle": [1, 1, 2],
+      "parFix": [
+        [False, False, False, False, False, False],
+        [False, False, True, True, True, True],
+        [False, False, False],
+        [False, False, False]
+      ],
+      "parVal": [
+        [3.096, 1.e-01, 1.089, 3.393, 2.097, 8.694],
+        [3.68, 1.5e-01, 1.089, 3.393, 2.097, 8.694],
+        [1, 1, 1],
+        [1000, 100, 10000]
+      ],
+      "parLimMin": [
+        [2.8, 6.0e-02, 0., 1., 0., 5.],
+        [3.2, 7.0e-02, 1.0889, 3.3929, 2.096, 8.693],
+        [-10, 0, -100],
+        [0, 0, 0]
+      ],
+      "parLimMax": [
+        #[3.4, 1.2e-01, 2., 5., 4., 10.], # integrated stat
+        [3.3, 1.2e-01, 2., 5., 4., 11.],
+        [3.9, 1.9e-01, 1.0891, 3.3931, 2.098, 8.695],
+        [10, 100, 100],
+        #[300000, 15000, 1.e+8] # integrated stat
+        [90000, 5000, 1.e+7]
+      ],
+      "parName": [
+        ["mean_Jpsi", "width_Jpsi", "a_Jpsi", "b_Jpsi", "c_Jpsi", "d_Jpsi"],
+        ["sum::mean_Psi2s(mean_Jpsi,0.584)", "prod::width_Psi2s(width_Jpsi,1.05)", "a_Psi2s", "b_Psi2s", "c_Psi2s", "d_Psi2s"],
+        ["aa", "bb", "cc"],
+        ["sig_Jpsi", "sig_Psi2s", "bkg"]
+      ],
+      "fitRangeMin": [2],
+      "fitRangeMax": [5],
+      "fitMethod": "likelyhood",
+      "doResidualPlot": true,
+      "doPullPlot": true, 
+      "doCorrMatPlot": true,
+      "doAlicePlot": True,
+      "parForAlicePlot": ["mean_Jpsi", "width_Jpsi", "sig_Jpsi"],
+      "parNameForAlicePlot": ["m_{J/#psi}", "#sigma_{J/#psi}", "#it{N}_{J/#psi}"],
+      "text": [
+        [0.20, 0.87, "LHC22o_medium, apass4, pp #sqrt{#it{s}} = 13.6 TeV"], 
+        [0.20, 0.80, "2.5 < #it{y} < 4, J/#psi #rightarrow #mu^{+}#mu^{-}"],
+        [0.20, 0.73, "MCH+MID"] #,
+        #[0.20, 0.66, "0 < #it{p}_{T} < 1 GeV/c"]
+      ]
+    }
+  },
+  "output": {
+    
+    
+    "output_file_name": "output/systematicTests/CB2VWG/"
+  }
+}
