@@ -1,4 +1,5 @@
 from telnetlib import DO
+import os
 import ROOT
 from ROOT import TCanvas, TFile, TH1F, TPaveText, RooRealVar, RooDataSet, RooWorkspace, RooDataHist, RooArgSet
 from ROOT import gPad, gROOT
@@ -9,7 +10,8 @@ class DQFitter:
     def __init__(self, fInName, fInputName, fOutPath, minDatasetRange, maxDatasetRange):
         self.fPdfDict          = {}
         self.fOutPath          = fOutPath
-        self.fFileOut          = TFile("{}{}.root".format(fOutPath, fInputName), "RECREATE")
+        self.fFileOutName      = "{}{}__{}_{}.root".format(fOutPath, fInputName, minDatasetRange, maxDatasetRange)
+        self.fFileOut          = TFile(self.fFileOutName, "RECREATE")
         self.fFileIn           = TFile.Open(fInName)
         self.fInputName        = fInputName
         self.fInput            = 0
@@ -81,7 +83,8 @@ class DQFitter:
 
                 # Define the pdf associating the parametes previously defined
                 nameFunc = self.fPdfDict["pdf"][i]
-                nameFunc += "Pdf::{}Pdf(m[{},{}]".format(self.fPdfDict["pdfName"][i],self.fPdfDict["fitRangeMin"][0],self.fPdfDict["fitRangeMax"][0])
+                #nameFunc += "Pdf::{}Pdf(m[{},{}]".format(self.fPdfDict["pdfName"][i],self.fPdfDict["fitRangeMin"][0],self.fPdfDict["fitRangeMax"][0])
+                nameFunc += "Pdf::{}Pdf(m[{},{}]".format(self.fPdfDict["pdfName"][i], self.fMinDatasetRange, self.fMaxDatasetRange)
                 pdfList.append(self.fPdfDict["pdfName"][i])
                 for j in range(0, len(parVal)):
                     nameFunc += ",{}".format(parName[j])
@@ -238,8 +241,29 @@ class DQFitter:
     
     def MultiTrial(self):
         '''
+        WARNING! To be fixed, multiple fits do not work properly
         Method to perform a multi-trial fit
         '''
         for iRange in range(0, len(self.fFitRangeMin)):
             self.FitInvMassSpectrum(self.fFitMethod, self.fFitRangeMin[iRange], self.fFitRangeMax[iRange])
         self.fFileOut.Close()
+
+        # Update file name
+        trialName = self.fTrialName + "_" + str(self.fFitRangeMin[iRange]) + "_" + str(self.fFitRangeMax[iRange]) + ".root"
+        oldFileOutName = self.fFileOutName
+        newFileOutName = oldFileOutName.replace(str(self.fFitRangeMin[iRange]) + "_" + str(self.fFitRangeMax[iRange]) + ".root", trialName)
+        os.rename(oldFileOutName, newFileOutName)
+
+    def SingleFit(self, fitRangeMin, fitRangeMax):
+        '''
+        Method to perform a single fit (calling multi-trial from external script)
+        '''
+        self.FitInvMassSpectrum(self.fFitMethod, fitRangeMin, fitRangeMax)
+        self.fFileOut.Close()
+
+        # Update file name
+        trialName = self.fTrialName + "_" + str(fitRangeMin) + "_" + str(fitRangeMax) + ".root"
+        oldFileOutName = self.fFileOutName
+        newFileOutName = oldFileOutName.replace(str(fitRangeMin) + "_" + str(fitRangeMax) + ".root", trialName)
+        os.rename(oldFileOutName, newFileOutName)
+
