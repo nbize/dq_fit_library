@@ -5,11 +5,12 @@ import numpy as np
 from array import array
 import os
 import sys
+import math
 import argparse
 import ROOT
 from os import path
 from ROOT import TGraphErrors, TCanvas, TF1, TFile, TPaveText, TMath, TH1F, TH2F, TString, TLegend, TRatioPlot, TGaxis, TLine, TLatex
-from ROOT import gROOT, gBenchmark, gPad, gStyle, kTRUE, kFALSE, kBlack, kRed, kDashed
+from ROOT import gROOT, gBenchmark, gPad, gStyle, kTRUE, kFALSE, kBlack, kRed, kGray, kDashed
 from plot_library import LoadStyle, SetLatex
 
 def StoreHistogramsFromFile(fIn, histType):
@@ -25,14 +26,19 @@ def StoreHistogramsFromFile(fIn, histType):
 
 def ComputeRMS(parValArray):
     '''
-    Method to evaluate the RMS of a sample
+    Method to evaluate the RMS of a sample ()
     '''
-    histDispersion = TH1F("histDispersion", "histDispersion", 10000, 0, 10000)
+    mean = 0
     for parVal in parValArray:
-        histDispersion.Fill(parVal)
-    return histDispersion.GetRMS()
+        mean += parVal
+    mean = mean / len(parValArray)
+    stdDev = 0
+    for parVal in parValArray:
+        stdDev += (parVal - mean) * (parVal - mean)
+    stdDev = math.sqrt(stdDev / len(parValArray))
+    return stdDev
 
-def DoSystematics(fIn, parName):
+def DoSystematics(path, varBin, parName):
     '''
     Method to evaluate the systematic errors from signal extraction
     '''
@@ -44,15 +50,21 @@ def DoSystematics(fIn, parName):
     parValArray  = array( 'f', [] )
     parErrArray = array( 'f', [] )
 
+    fInNameAllList = os.listdir(path)
+    fInNameSelList = [path + "/" + fInName for fInName in fInNameAllList if varBin in fInName]
+    fInNameSelList = [fInName for fInName in fInNameSelList if ".root" in fInName]
+    
     index = 0.5
-    for key in fIn.GetListOfKeys():
-        kname = key.GetName()
-        if "fit_results" in fIn.Get(kname).GetName():
-            trialIndexArray.append(index)
-            nameTrialArray.append(fIn.Get(kname).GetName().replace("fit_results_", ""))
-            parValArray.append(fIn.Get(kname).GetBinContent(fIn.Get(kname).GetXaxis().FindBin(parName)))
-            parErrArray.append(fIn.Get(kname).GetBinError(fIn.Get(kname).GetXaxis().FindBin(parName)))
-            index = index + 1
+    for fInName in fInNameSelList:
+        fIn = TFile.Open(fInName)
+        for key in fIn.GetListOfKeys():
+            kname = key.GetName()
+            if "fit_results" in fIn.Get(kname).GetName():
+                trialIndexArray.append(index)
+                nameTrialArray.append(fIn.Get(kname).GetName().replace("fit_results_", ""))
+                parValArray.append(fIn.Get(kname).GetBinContent(fIn.Get(kname).GetXaxis().FindBin(parName)))
+                parErrArray.append(fIn.Get(kname).GetBinError(fIn.Get(kname).GetXaxis().FindBin(parName)))
+                index = index + 1
 
     graParVal = TGraphErrors(len(parValArray), trialIndexArray, parValArray, 0, parErrArray)
     graParVal.SetMarkerStyle(24)
@@ -61,7 +73,7 @@ def DoSystematics(fIn, parName):
     graParVal.SetLineColor(kBlack)
 
     funcParVal = TF1("funcParVal", "[0]", 0, len(trialIndexArray))
-    graParVal.Fit(funcParVal, "R0")
+    graParVal.Fit(funcParVal, "R0Q")
     funcParVal.SetLineColor(kRed)
     funcParVal.SetLineWidth(2)
 
@@ -73,24 +85,23 @@ def DoSystematics(fIn, parName):
         parValSystArray.append(funcParVal.GetParameter(0))
         parErrSystArray.append(ComputeRMS(parValArray))
 
-    print(ComputeRMS(parValArray), funcParVal.GetParError(0))
-
     graParSyst = TGraphErrors(len(parValArray), trialIndexArray, parValSystArray, trialIndexWidthArray, parErrSystArray)
-    graParSyst.SetFillColorAlpha(kRed, 0.3)
+    graParSyst.SetFillColorAlpha(kGray+1, 0.3)
 
     lineParStatUp = TLine(0, funcParVal.GetParameter(0) + funcParVal.GetParError(0), len(trialIndexArray), funcParVal.GetParameter(0) + funcParVal.GetParError(0))
     lineParStatUp.SetLineStyle(kDashed)
-    lineParStatUp.SetLineColor(kRed)
+    lineParStatUp.SetLineColor(kGray+1)
 
     lineParStatDown = TLine(0, funcParVal.GetParameter(0) - funcParVal.GetParError(0), len(trialIndexArray), funcParVal.GetParameter(0) - funcParVal.GetParError(0))
     lineParStatDown.SetLineStyle(kDashed)
-    lineParStatDown.SetLineColor(kRed)
+    lineParStatDown.SetLineColor(kGray+1)
 
     latexTitle = TLatex()
     SetLatex(latexTitle)
 
     canvasParVal = TCanvas("canvasParVal", "canvasParVal", 800, 600)
-    histGrid = TH2F("histGrid", "", len(parValArray), 0, len(parValArray), 100, 0.7 * max(parValArray), 1.3 * max(parValArray))
+    #histGrid = TH2F("histGrid", "", len(parValArray), 0, len(parValArray), 100, 0.7 * max(parValArray), 1.3 * max(parValArray))
+    histGrid = TH2F("histGrid", "", len(parValArray), 0, len(parValArray), 100, 0.7 * min(parValArray), 1.3 * max(parValArray))
     indexLabel = 1
     for nameTrial in nameTrialArray:
         histGrid.GetXaxis().SetBinLabel(indexLabel, nameTrial)
@@ -101,13 +112,16 @@ def DoSystematics(fIn, parName):
     lineParStatDown.Draw("same")
     graParSyst.Draw("E2same")
     graParVal.Draw("EPsame")
-    latexTitle.DrawLatex(0.37, 0.85, "N_{J/#psi} = #bf{%3.2f} #pm #bf{%3.2f} (%3.2f %%) #pm #bf{%3.2f} (%3.2f %%)" % (funcParVal.GetParameter(0), funcParVal.GetParError(0), (funcParVal.GetParError(0)/funcParVal.GetParameter(0))*100, ComputeRMS(parValArray), (ComputeRMS(parValArray)/funcParVal.GetParameter(0))*100))
 
-    canvasParVal.SaveAs("test.pdf")
+    centralVal = funcParVal.GetParameter(0)
+    statError = funcParVal.GetParError(0)
+    systError = ComputeRMS(parValArray)
+    latexTitle.DrawLatex(0.25, 0.85, "N_{J/#psi} = #bf{%3.2f} #pm #bf{%3.2f} (%3.2f %%) #pm #bf{%3.2f} (%3.2f %%)" % (centralVal, statError, (statError/centralVal)*100, systError, (systError/centralVal)*100))
+    print("%s -> %3.2f +/- %3.2f (%3.2f %%) +/- %3.2f (%3.2f %%)" % (varBin, centralVal, statError, (statError/centralVal)*100, systError, (systError/centralVal)*100))
 
-    input()
+    canvasParVal.SaveAs("{}/systematics/{}_{}.pdf".format(path, varBin, parName))
 
-def CheckVariables(fInNames, parNames, xMin, xMax, fOutName):
+def CheckVariables(fInNames, parNames, xMin, xMax, fOutName, obs):
     '''
     Method to chech the variable evolution vs file in the list
     '''
@@ -126,7 +140,7 @@ def CheckVariables(fInNames, parNames, xMin, xMax, fOutName):
     xBins.append(xMax[len(xMin)-1])
     
 
-    fOut = TFile("{}myAnalysis.root".format(fOutName), "RECREATE")
+    fOut = TFile("{}myAnalysis_{}.root".format(fOutName,obs), "RECREATE")
 
     for parName in parNames:
         parValArray  = array( 'f', [] )
