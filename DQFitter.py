@@ -130,6 +130,11 @@ class DQFitter:
 
         index = 1
         histResults = TH1F("fit_results_{}".format(trialName), "fit_results_{}".format(trialName), len(self.fParNames), 0., len(self.fParNames))
+        # histResults = TH1F("fit_results_{}".format(trialName), "fit_results_{}".format(trialName), len(self.fParNames)+1, 0., len(self.fParNames)+1)
+        # index = 2
+        # ratio = self.fRooWorkspace.var("sig_Psi2s").getVal() / self.fRooWorkspace.var("sig_Jpsi").getVal()
+        # histResults.GetXaxis().SetBinLabel(1,"ratio")
+        # histResults.SetBinContent(1,ratio)
         for parName in self.fParNames:
             histResults.GetXaxis().SetBinLabel(index, parName)
             histResults.SetBinContent(index, self.fRooWorkspace.var(parName).getVal())

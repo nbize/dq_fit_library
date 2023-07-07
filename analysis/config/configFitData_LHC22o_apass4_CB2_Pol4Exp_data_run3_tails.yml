@@ -1,8 +1,8 @@
 {
     "input": {
-      "input_file_name": "/Users/lucamicheletti/cernbox/JPSI/Run3/2022/apass4/LHC22o_medium/AnalysisResultsHistograms.root",
+      "input_file_name": "/Users/nicolasbize/alice/fresh-analysis/Analysis_Data/psi2sToJpsi/LHC22o_medium_apass4/differential_pt.root",
       "input_name": [
-        "hist_mass_pt_all_histo_PairsMuonSEPM_matchedMchMid_pt_3_4"
+        "pt_0_1","pt_1_2","pt_2_3","pt_3_4","pt_4_5","pt_5_7","pt_7_10","pt_10_20"
       ],
       "pdf_dictionary": {
         "pdf": ["CB2", "CB2", "Pol4Exp", "SUM"],

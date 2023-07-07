@@ -49,6 +49,13 @@ def main():
         ptMax = inputCfg["input"]["analysis_dictionary"]["ptMax"]
         for iRange in range(0, len(ptMin)):
             DoSystematics(inputCfg["output"]["output_file_name"], "pt_%i_%i" % (ptMin[iRange], ptMax[iRange]), "sig_Jpsi")
+        
+        # y bin systematics
+        # yMin = inputCfg["input"]["analysis_dictionary"]["yMin"]
+        # yMax = inputCfg["input"]["analysis_dictionary"]["yMax"]
+
+        # for iyRange in range(0, len(yMin)):
+        #     DoSystematics(inputCfg["output"]["output_file_name"], "y_%.2f_%.2f" % (yMin[iyRange], yMax[iyRange]), "sig_Jpsi")
 
     if args.check_variables:
         fInNames = inputCfg["input"]["analysis_dictionary"]["input_name_pt"]
