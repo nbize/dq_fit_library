@@ -53,6 +53,7 @@ def DoSystematics(path, varBin, parName):
     fInNameAllList = os.listdir(path)
     fInNameSelList = [path + "/" + fInName for fInName in fInNameAllList if varBin in fInName]
     fInNameSelList = [fInName for fInName in fInNameSelList if ".root" in fInName]
+    fInNameSelList.sort()
     
     index = 0.5
     for fInName in fInNameSelList:
