@@ -128,7 +128,13 @@ def DoSystematics(path, varBin, parName, fOut):
     centralVal = funcParVal.GetParameter(0)
     statError = funcParVal.GetParError(0)
     systError = ComputeRMS(parValArray)
-    latexTitle.DrawLatex(0.25, 0.85, "N_{J/#psi} = #bf{%3.2f} #pm #bf{%3.2f} (%3.2f %%) #pm #bf{%3.2f} (%3.2f %%)" % (centralVal, statError, (statError/centralVal)*100, systError, (systError/centralVal)*100))
+
+    if "sig" in parName:
+        if "Jpsi" in parName: latexParName = "N_{J/#psi}"
+        if "Psi2s" in parName: latexParName = "N_{#psi(2S)}"
+    if "chi2" in parName: latexParName = "#chi^{2}_{FIT}"
+
+    latexTitle.DrawLatex(0.25, 0.85, "%s = #bf{%3.2f} #pm #bf{%3.2f} (%3.2f %%) #pm #bf{%3.2f} (%3.2f %%)" % (latexParName, centralVal, statError, (statError/centralVal)*100, systError, (systError/centralVal)*100))
     print("%s -> %3.2f +/- %3.2f (%3.2f %%) +/- %3.2f (%3.2f %%)" % (varBin, centralVal, statError, (statError/centralVal)*100, systError, (systError/centralVal)*100))
 
     num = re.findall(r'[\d\.\d]+', varBin)
