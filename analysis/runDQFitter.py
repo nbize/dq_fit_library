@@ -47,8 +47,19 @@ def main():
         # pt bin systematics
         ptMin = inputCfg["input"]["analysis_dictionary"]["ptMin"]
         ptMax = inputCfg["input"]["analysis_dictionary"]["ptMax"]
-        for iRange in range(0, len(ptMin)):
-            DoSystematics(inputCfg["output"]["output_file_name"], "pt_%i_%i" % (ptMin[iRange], ptMax[iRange]), "sig_Jpsi")
+        with open("{}/systematics/{}_vs_pt.txt".format(inputCfg["output"]["output_file_name"], "sig_Jpsi"), 'w') as fOut:
+            fOut.write("x_min x_max val stat syst \n")
+            for iRange in range(0, len(ptMin)):
+                DoSystematics(inputCfg["output"]["output_file_name"], "pt_%i_%i" % (ptMin[iRange], ptMax[iRange]), "sig_Jpsi", fOut)
+
+        # y bin systematics
+        yMin = inputCfg["input"]["analysis_dictionary"]["yMin"]
+        yMax = inputCfg["input"]["analysis_dictionary"]["yMax"]
+        with open("{}/systematics/{}_vs_y.txt".format(inputCfg["output"]["output_file_name"], "sig_Jpsi"), 'w') as fOut:
+            fOut.write("x_min x_max val stat syst \n")
+            for iRange in range(0, len(yMin)):
+                DoSystematics(inputCfg["output"]["output_file_name"], "y_%3.2f_%3.2f" % (yMin[iRange], yMax[iRange]), "sig_Jpsi", fOut)
+            fOut.close()
 
     if args.check_variables:
         fInNames = inputCfg["input"]["analysis_dictionary"]["input_name_pt"]

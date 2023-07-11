@@ -21,7 +21,20 @@ def SetLegend(legend):
     legend.SetLineStyle(0)
     legend.SetLineColor(0)
     legend.SetTextFont(42)
-    legend.SetTextSize(0.03)
+    legend.SetTextSize(0.04)
+
+def SetGraStat(gra, style, color):
+    gra.SetMarkerStyle(style)
+    gra.SetMarkerColor(color)
+    gra.SetLineWidth(2)
+    gra.SetLineColor(color)
+
+def SetGraSyst(gra, style, color):
+    gra.SetMarkerStyle(style)
+    gra.SetMarkerColor(color)
+    gra.SetLineWidth(2)
+    gra.SetLineColor(color)
+    gra.SetFillStyle(0)
 
 def LoadStyle():
     gStyle.SetPadLeftMargin(0.15)

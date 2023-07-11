@@ -2,7 +2,12 @@
     "input": {
       "input_file_name": "/Users/lucamicheletti/cernbox/JPSI/Run3/2022/apass4/LHC22o_medium/AnalysisResultsHistograms.root",
       "input_name": [
-        "hist_mass_pt_all_histo_PairsMuonSEPM_matchedMchMid_pt_3_4"
+        "hist_mass_y_all_histo_PairsMuonSEPM_matchedMchMid_y_2.50_2.75",
+        "hist_mass_y_all_histo_PairsMuonSEPM_matchedMchMid_y_2.75_3.00",
+        "hist_mass_y_all_histo_PairsMuonSEPM_matchedMchMid_y_3.00_3.25",
+        "hist_mass_y_all_histo_PairsMuonSEPM_matchedMchMid_y_3.25_3.50",
+        "hist_mass_y_all_histo_PairsMuonSEPM_matchedMchMid_y_3.50_3.75",
+        "hist_mass_y_all_histo_PairsMuonSEPM_matchedMchMid_y_3.75_4.00",
       ],
       "pdf_dictionary": {
         "pdf": ["CB2", "CB2", "VWG", "SUM"],
@@ -36,8 +41,8 @@
         ],
         #"fitRangeMin": [2, 2.2, 2.4],
         #"fitRangeMax": [5, 4.8, 4.6],
-        "fitRangeMin": [2.2, 2.4],
-        "fitRangeMax": [4.8, 4.6],
+        "fitRangeMin": [2],
+        "fitRangeMax": [5],
         "fitMethod": "likelyhood",
         "doResidualPlot": true,
         "doPullPlot": true, 
@@ -56,16 +61,16 @@
         "output/analysis/LHC22o_medium_apass4_data_run3_tails/hist_mass_pt_all_histo_PairsMuonSEPM_matchedMchMid_pt_0_1__2_5.root",
         "output/analysis/LHC22o_medium_apass4_data_run3_tails/hist_mass_pt_all_histo_PairsMuonSEPM_matchedMchMid_pt_1_2__2_5.root",
         ],
-        "ptMin": [0., 1., 2., 3., 4.],
-        "ptMax": [1., 2., 3., 4., 5.],
+        "ptMin": [0., 1., 2., 3., 4., 5., 7., 10.],
+        "ptMax": [1., 2., 3., 4., 5., 7., 10., 20.],
         "input_name_y": [
         "output/analysis/LHC22o_medium_apass4_data_run3_tails/hist_mass_y_all_histo_PairsMuonSEPM_matchedMchMid_y_2.50_2.75__2_5.root",
         ],
-        "yMin": [2.50],
-        "yMax": [2.75],
+        "yMin": [2.50, 2.75, 3.00, 3.25, 3.50, 3.75],
+        "yMax": [2.75, 3.00, 3.25, 3.50, 3.75, 4.00],
       }
     },
     "output": {
-      "output_file_name": "output/analysis/LHC22o_medium_apass4_data_run3_tails/"
+      "output_file_name": "output/analysis/LHC22o_medium_apass4_data_run3_tails/nicolas_results"
     }
   }

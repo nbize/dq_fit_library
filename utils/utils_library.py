@@ -6,6 +6,9 @@ from array import array
 import os
 import sys
 import math
+import re
+import uncertainties
+from uncertainties import unumpy
 import argparse
 import ROOT
 from os import path
@@ -38,7 +41,15 @@ def ComputeRMS(parValArray):
     stdDev = math.sqrt(stdDev / len(parValArray))
     return stdDev
 
-def DoSystematics(path, varBin, parName):
+def PropagateErrorsOnRatio(val1, err1, val2, err2):
+    var1 = unumpy.uarray(val1, err1)
+    var2 = unumpy.uarray(val2, err2)
+    ratio = var2 / var1
+    arrVal = unumpy.nominal_values(ratio)
+    arrErr = unumpy.std_devs(ratio)
+    return arrVal, arrErr
+
+def DoSystematics(path, varBin, parName, fOut):
     '''
     Method to evaluate the systematic errors from signal extraction
     '''
@@ -120,6 +131,8 @@ def DoSystematics(path, varBin, parName):
     latexTitle.DrawLatex(0.25, 0.85, "N_{J/#psi} = #bf{%3.2f} #pm #bf{%3.2f} (%3.2f %%) #pm #bf{%3.2f} (%3.2f %%)" % (centralVal, statError, (statError/centralVal)*100, systError, (systError/centralVal)*100))
     print("%s -> %3.2f +/- %3.2f (%3.2f %%) +/- %3.2f (%3.2f %%)" % (varBin, centralVal, statError, (statError/centralVal)*100, systError, (systError/centralVal)*100))
 
+    num = re.findall(r'[\d\.\d]+', varBin)
+    fOut.write("%3.2f %3.2f %3.2f %3.2f %3.2f \n" % (float(num[0]), float(num[1]), centralVal, statError, systError))
     canvasParVal.SaveAs("{}/systematics/{}_{}.pdf".format(path, varBin, parName))
 
 def CheckVariables(fInNames, parNames, xMin, xMax, fOutName, obs):

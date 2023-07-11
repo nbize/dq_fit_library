@@ -1,8 +1,8 @@
 {
     "input": {
-      "input_file_name": "LHC22o_medium/AnalysisResultsHistograms.root",
+      "input_file_name": "/Users/lucamicheletti/cernbox/JPSI/Run3/2022/apass4/LHC22o_medium/AnalysisResultsHistograms.root",
       "input_name": [
-        "hist_mass_pt_all_histo_PairsMuonSEPM_matchedMchMid_pt_0_1"
+        "hist_mass_pt_all_histo_PairsMuonSEPM_matchedMchMid_pt_1_2"
       ],
       "pdf_dictionary": {
         "pdf": ["CB2", "CB2", "VWG", "SUM"],
@@ -34,8 +34,8 @@
           ["aa", "bb", "cc"],
           ["sig_Jpsi", "sig_Psi2s", "bkg"]
         ],
-        "fitRangeMin": [2],
-        "fitRangeMax": [5],
+        "fitRangeMin": [2, 2.2, 2.4],
+        "fitRangeMax": [5, 4.8, 4.6],
         "fitMethod": "likelyhood",
         "doResidualPlot": true,
         "doPullPlot": true, 
@@ -74,6 +74,6 @@
       }
     },
     "output": {
-      "output_file_name": "output/analysis/LHC22o_medium_apass4_run3_tails/"
+      "output_file_name": "output/analysis/LHC22o_medium_apass4_mc_run3_tails/"
     }
   }

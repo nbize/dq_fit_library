@@ -2,7 +2,12 @@
     "input": {
       "input_file_name": "/Users/lucamicheletti/cernbox/JPSI/Run3/2022/apass4/LHC22o_medium/AnalysisResultsHistograms.root",
       "input_name": [
-        "hist_mass_pt_all_histo_PairsMuonSEPM_matchedMchMid_pt_3_4"
+        "hist_mass_y_all_histo_PairsMuonSEPM_matchedMchMid_y_2.50_2.75",
+        "hist_mass_y_all_histo_PairsMuonSEPM_matchedMchMid_y_2.75_3.00",
+        "hist_mass_y_all_histo_PairsMuonSEPM_matchedMchMid_y_3.00_3.25",
+        "hist_mass_y_all_histo_PairsMuonSEPM_matchedMchMid_y_3.25_3.50",
+        "hist_mass_y_all_histo_PairsMuonSEPM_matchedMchMid_y_3.50_3.75",
+        "hist_mass_y_all_histo_PairsMuonSEPM_matchedMchMid_y_3.75_4.00",
       ],
       "pdf_dictionary": {
         "pdf": ["CB2", "CB2", "Pol4Exp", "SUM"],
