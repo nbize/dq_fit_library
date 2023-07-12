@@ -128,15 +128,6 @@ class DQFitter:
             #print("########### Perform X2 fit ###########")
             #rooFitRes = ROOT.RooFitResult(pdf.chi2FitTo(rooDs, ROOT.RooFit.Range(fitRangeMin,fitRangeMax),ROOT.RooFit.PrintLevel(-1), ROOT.RooFit.Save()))
 
-        index = 1
-        histResults = TH1F("fit_results_{}".format(trialName), "fit_results_{}".format(trialName), len(self.fParNames), 0., len(self.fParNames))
-        for parName in self.fParNames:
-            histResults.GetXaxis().SetBinLabel(index, parName)
-            histResults.SetBinContent(index, self.fRooWorkspace.var(parName).getVal())
-            histResults.SetBinError(index, self.fRooWorkspace.var(parName).getError())
-            index += 1
-
-      
         rooDs.plotOn(fRooPlot, ROOT.RooFit.MarkerStyle(20), ROOT.RooFit.MarkerSize(0.6), ROOT.RooFit.Range(fitRangeMin, fitRangeMax))
         pdf.plotOn(fRooPlot, ROOT.RooFit.LineColor(ROOT.kRed+1), ROOT.RooFit.LineWidth(2), ROOT.RooFit.Range(fitRangeMin, fitRangeMax))
         #pdf.plotOn(fRooPlot, ROOT.RooFit.VisualizeError(rooFitRes, 1), ROOT.RooFit.FillColor(ROOT.kRed-10), ROOT.RooFit.Range(fitRangeMin, fitRangeMax))
@@ -146,25 +137,6 @@ class DQFitter:
             if not self.fPdfDict["pdfName"][i] == "SUM":
                 pdf.plotOn(fRooPlot, ROOT.RooFit.Components("{}Pdf".format(self.fPdfDict["pdfName"][i])), ROOT.RooFit.LineColor(self.fPdfDict["pdfColor"][i]), ROOT.RooFit.LineStyle(self.fPdfDict["pdfStyle"][i]), ROOT.RooFit.LineWidth(2), ROOT.RooFit.Range(fitRangeMin, fitRangeMax))
         
-        extraText = [] # extra text for "propaganda" plots
-
-        paveText = TPaveText(0.60, 0.45, 0.99, 0.94, "brNDC")
-        paveText.SetTextFont(42)
-        paveText.SetTextSize(0.025)
-        paveText.SetFillColor(ROOT.kWhite)
-        for parName in self.fParNames:
-            paveText.AddText("{} = {:.4f} #pm {:.4f}".format(parName, self.fRooWorkspace.var(parName).getVal(), self.fRooWorkspace.var(parName).getError()))
-            if self.fPdfDict["parForAlicePlot"].count(parName) > 0:
-                text = self.fPdfDict["parNameForAlicePlot"][self.fPdfDict["parForAlicePlot"].index(parName)]
-                if "sig" in parName:
-                    extraText.append("{} = {:.0f} #pm {:.0f}".format(text, self.fRooWorkspace.var(parName).getVal(), self.fRooWorkspace.var(parName).getError()))
-                else:
-                    extraText.append("{} = {:.3f} #pm {:.3f}".format(text, self.fRooWorkspace.var(parName).getVal(), self.fRooWorkspace.var(parName).getError()))
-            for i in range(0, len(self.fPdfDict["pdfName"])):
-                if self.fPdfDict["pdfName"][i] in parName:
-                    (paveText.GetListOfLines().Last()).SetTextColor(self.fPdfDict["pdfColor"][i])
-
-
         reduced_chi2 = 0
         if "TTree" in self.fInput.ClassName():
             #Fit with RooChi2Var
@@ -191,7 +163,35 @@ class DQFitter:
             ndof = nBins - nPars
             reduced_chi2 = chi2.getVal() / ndof
 
-        
+        index = 1
+        histResults = TH1F("fit_results_{}".format(trialName), "fit_results_{}".format(trialName), len(self.fParNames), 0., len(self.fParNames))
+        for parName in self.fParNames:
+            histResults.GetXaxis().SetBinLabel(index, parName)
+            histResults.SetBinContent(index, self.fRooWorkspace.var(parName).getVal())
+            histResults.SetBinError(index, self.fRooWorkspace.var(parName).getError())
+            index += 1
+
+        histResults.GetXaxis().SetBinLabel(index, "chi2")
+        histResults.SetBinContent(index, reduced_chi2)
+
+        extraText = [] # extra text for "propaganda" plots
+
+        paveText = TPaveText(0.60, 0.45, 0.99, 0.94, "brNDC")
+        paveText.SetTextFont(42)
+        paveText.SetTextSize(0.025)
+        paveText.SetFillColor(ROOT.kWhite)
+        for parName in self.fParNames:
+            paveText.AddText("{} = {:.4f} #pm {:.4f}".format(parName, self.fRooWorkspace.var(parName).getVal(), self.fRooWorkspace.var(parName).getError()))
+            if self.fPdfDict["parForAlicePlot"].count(parName) > 0:
+                text = self.fPdfDict["parNameForAlicePlot"][self.fPdfDict["parForAlicePlot"].index(parName)]
+                if "sig" in parName:
+                    extraText.append("{} = {:.0f} #pm {:.0f}".format(text, self.fRooWorkspace.var(parName).getVal(), self.fRooWorkspace.var(parName).getError()))
+                else:
+                    extraText.append("{} = {:.3f} #pm {:.3f}".format(text, self.fRooWorkspace.var(parName).getVal(), self.fRooWorkspace.var(parName).getError()))
+            for i in range(0, len(self.fPdfDict["pdfName"])):
+                if self.fPdfDict["pdfName"][i] in parName:
+                    (paveText.GetListOfLines().Last()).SetTextColor(self.fPdfDict["pdfColor"][i])
+
         # Add the chiSquare value
         paveText.AddText("n Par = %3.2f" % (nPars)) 
         paveText.AddText("n Bins = %3.2f" % (nBins))
