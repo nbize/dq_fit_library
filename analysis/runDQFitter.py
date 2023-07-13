@@ -21,6 +21,7 @@ def main():
     parser.add_argument("--gen_tutorial", help="generate tutorial sample", action="store_true")
     parser.add_argument("--do_fit", help="run the multi trial", action="store_true")
     parser.add_argument("--do_systematics", help="do systematic on signal extraction", action="store_true")
+    parser.add_argument("--check_tails", help="check signal tail parameters", action="store_true")
     parser.add_argument("--check_variables", help="check variables for the fit file", action="store_true")
     args = parser.parse_args()
     print(args)
@@ -44,22 +45,33 @@ def main():
             #dqFitter.MultiTrial() # TO BE FIXED
 
     if args.do_systematics:
-        # pt bin systematics
-        ptMin = inputCfg["input"]["analysis_dictionary"]["ptMin"]
-        ptMax = inputCfg["input"]["analysis_dictionary"]["ptMax"]
-        with open("{}/systematics/{}_vs_pt.txt".format(inputCfg["output"]["output_file_name"], "sig_Jpsi"), 'w') as fOut:
-            fOut.write("x_min x_max val stat syst \n")
-            for iRange in range(0, len(ptMin)):
-                DoSystematics(inputCfg["output"]["output_file_name"], "pt_%i_%i" % (ptMin[iRange], ptMax[iRange]), "sig_Jpsi", fOut)
+        params = ["sig_Jpsi", "sig_Psi2s", "chi2"]
+        for param in params:
+            # pt bin systematics
+            ptMin = inputCfg["input"]["analysis_dictionary"]["ptMin"]
+            ptMax = inputCfg["input"]["analysis_dictionary"]["ptMax"]
+            with open("{}/systematics/{}_vs_pt.txt".format(inputCfg["output"]["output_file_name"], param), 'w') as fOut:
+                fOut.write("x_min x_max val stat syst \n")
+                for iRange in range(0, len(ptMin)):
+                    DoSystematics(inputCfg["output"]["output_file_name"], "pt_%i_%i" % (ptMin[iRange], ptMax[iRange]), param, fOut)
 
-        # y bin systematics
-        yMin = inputCfg["input"]["analysis_dictionary"]["yMin"]
-        yMax = inputCfg["input"]["analysis_dictionary"]["yMax"]
-        with open("{}/systematics/{}_vs_y.txt".format(inputCfg["output"]["output_file_name"], "sig_Jpsi"), 'w') as fOut:
-            fOut.write("x_min x_max val stat syst \n")
-            for iRange in range(0, len(yMin)):
-                DoSystematics(inputCfg["output"]["output_file_name"], "y_%3.2f_%3.2f" % (yMin[iRange], yMax[iRange]), "sig_Jpsi", fOut)
-            fOut.close()
+            # y bin systematics
+            yMin = inputCfg["input"]["analysis_dictionary"]["yMin"]
+            yMax = inputCfg["input"]["analysis_dictionary"]["yMax"]
+            with open("{}/systematics/{}_vs_y.txt".format(inputCfg["output"]["output_file_name"], param), 'w') as fOut:
+                fOut.write("x_min x_max val stat syst \n")
+                for iRange in range(0, len(yMin)):
+                    DoSystematics(inputCfg["output"]["output_file_name"], "y_%3.2f_%3.2f" % (yMin[iRange], yMax[iRange]), param, fOut)
+                fOut.close()
+
+    if args.check_tails:
+        for histName in inputCfg["input"]["input_name"]:
+            minFitRanges = inputCfg["input"]["pdf_dictionary"]["fitRangeMin"]
+            maxFitRanges = inputCfg["input"]["pdf_dictionary"]["fitRangeMax"]
+            for iRange in range(0, len(minFitRanges)):
+                dqFitter = DQFitter(inputCfg["input"]["input_file_name"], histName, inputCfg["output"]["output_file_name"], minFitRanges[iRange], maxFitRanges[iRange])
+                dqFitter.SetFitConfig(inputCfg["input"]["pdf_dictionary"])
+                dqFitter.CheckSignalTails(minFitRanges[iRange], maxFitRanges[iRange])
 
     if args.check_variables:
         fInNames = inputCfg["input"]["analysis_dictionary"]["input_name_pt"]

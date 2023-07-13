@@ -101,6 +101,14 @@ class DQFitter:
                 nameFunc += ")"
                 self.fRooWorkspace.factory(nameFunc)
 
+    def CheckSignalTails(self, fitRangeMin, fitRangeMax):
+        '''
+        Method to plot the signal tail parameters
+        '''
+        self.fRooWorkspace.Print()
+        self.fRooWorkspace.writeToFile("{}_tails.root".format(self.fTrialName))
+        ROOT.gDirectory.Add(self.fRooWorkspace)
+
     def FitInvMassSpectrum(self, fitMethod, fitRangeMin, fitRangeMax):
         '''
         Method to perform the fit to the invariant mass spectrum

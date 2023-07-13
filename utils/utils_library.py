@@ -108,12 +108,16 @@ def DoSystematics(path, varBin, parName, fOut):
     lineParStatDown.SetLineStyle(kDashed)
     lineParStatDown.SetLineColor(kGray+1)
 
+    centralVal = funcParVal.GetParameter(0)
+    statError = funcParVal.GetParError(0)
+    systError = ComputeRMS(parValArray)
+
     latexTitle = TLatex()
     SetLatex(latexTitle)
 
     canvasParVal = TCanvas("canvasParVal", "canvasParVal", 800, 600)
     #histGrid = TH2F("histGrid", "", len(parValArray), 0, len(parValArray), 100, 0.7 * max(parValArray), 1.3 * max(parValArray))
-    histGrid = TH2F("histGrid", "", len(parValArray), 0, len(parValArray), 100, 0.7 * min(parValArray), 1.3 * max(parValArray))
+    histGrid = TH2F("histGrid", "", len(parValArray), 0, len(parValArray), 100, centralVal-7*systError, centralVal+7*systError)
     indexLabel = 1
     for nameTrial in nameTrialArray:
         histGrid.GetXaxis().SetBinLabel(indexLabel, nameTrial)
@@ -125,17 +129,13 @@ def DoSystematics(path, varBin, parName, fOut):
     graParSyst.Draw("E2same")
     graParVal.Draw("EPsame")
 
-    centralVal = funcParVal.GetParameter(0)
-    statError = funcParVal.GetParError(0)
-    systError = ComputeRMS(parValArray)
-
     if "sig" in parName:
         if "Jpsi" in parName: latexParName = "N_{J/#psi}"
         if "Psi2s" in parName: latexParName = "N_{#psi(2S)}"
     if "chi2" in parName: latexParName = "#chi^{2}_{FIT}"
 
     latexTitle.DrawLatex(0.25, 0.85, "%s = #bf{%3.2f} #pm #bf{%3.2f} (%3.2f %%) #pm #bf{%3.2f} (%3.2f %%)" % (latexParName, centralVal, statError, (statError/centralVal)*100, systError, (systError/centralVal)*100))
-    print("%s -> %3.2f +/- %3.2f (%3.2f %%) +/- %3.2f (%3.2f %%)" % (varBin, centralVal, statError, (statError/centralVal)*100, systError, (systError/centralVal)*100))
+    print("%s -> %1.0f ± %1.0f (%3.2f%%) ± %1.0f (%3.2f%%)" % (varBin, centralVal, statError, (statError/centralVal)*100, systError, (systError/centralVal)*100))
 
     num = re.findall(r'[\d\.\d]+', varBin)
     fOut.write("%3.2f %3.2f %3.2f %3.2f %3.2f \n" % (float(num[0]), float(num[1]), centralVal, statError, systError))

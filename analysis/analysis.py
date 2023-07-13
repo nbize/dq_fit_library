@@ -31,7 +31,7 @@ def main():
         # Load datasets
         ###############
         # y-dependence
-        dfYieldJpsiY = pd.read_csv('/Users/lucamicheletti/GITHUB/dq_fit_library/analysis/output/analysis/LHC22o_medium_apass4_data_run3_tails/systematics/sig_Jpsi_vs_y.txt', sep=' ')
+        dfYieldJpsiY = pd.read_csv('/Users/lucamicheletti/GITHUB/dq_fit_library/analysis/output/analysis/LHC22o_full_stat_apass4_data_run3_tails/systematics/sig_Jpsi_vs_y.txt', sep=' ')
         yMin = dfYieldJpsiY["x_min"].to_numpy()
         yMax = dfYieldJpsiY["x_max"].to_numpy()
         yArr = np.append(yMin, yMax[len(yMin)-1],)
@@ -40,11 +40,13 @@ def main():
         yieldJpsiY = dfYieldJpsiY["val"].to_numpy()
         statYieldJpsiY = dfYieldJpsiY["stat"].to_numpy()
         systYieldJpsiY = dfYieldJpsiY["syst"].to_numpy()
+        print("Sum J/psi vs y: ", sum(yieldJpsiY))
 
-        dfYieldPsi2sY = pd.read_csv('/Users/lucamicheletti/GITHUB/dq_fit_library/analysis/output/analysis/LHC22o_medium_apass4_data_run3_tails/systematics/sig_Psi2s_vs_y.txt', sep=' ')
+        dfYieldPsi2sY = pd.read_csv('/Users/lucamicheletti/GITHUB/dq_fit_library/analysis/output/analysis/LHC22o_full_stat_apass4_data_run3_tails/systematics/sig_Psi2s_vs_y.txt', sep=' ')
         yieldPsi2sY = dfYieldPsi2sY["val"].to_numpy()
         statYieldPsi2sY = dfYieldPsi2sY["stat"].to_numpy()
         systYieldPsi2sY = dfYieldPsi2sY["syst"].to_numpy()
+        print("Sum Psi(2S) vs y: ", sum(yieldPsi2sY))
 
         dfYieldJpsiY = pd.read_csv('run2_results/sig_Jpsi_vs_y_run2.txt', sep=' ')
         yieldJpsiYRun2 = dfYieldJpsiY["val"].to_numpy()
@@ -188,7 +190,7 @@ def main():
         histSystYieldJpsiPt.Draw("E2 SAME")
         histStatYieldJpsiPt.Draw("EP SAME")
         legendYieldJpsiPt.Draw("SAME")
-        canvasYieldJpsiPt.SaveAs("jpsi_norm_yield_vs_pt.pdf")
+        canvasYieldJpsiPt.SaveAs("figures/jpsi_norm_yield_vs_pt.pdf")
 
         legendYieldPsi2sPt = TLegend(0.69, 0.69, 0.89, 0.89, " ", "brNDC")
         SetLegend(legendYieldPsi2sPt)
@@ -206,7 +208,7 @@ def main():
         histSystYieldPsi2sPt.Draw("E2 SAME")
         histStatYieldPsi2sPt.Draw("EP SAME")
         legendYieldPsi2sPt.Draw("SAME")
-        canvasYieldPsi2sPt.SaveAs("psi2s_norm_yield_vs_pt.pdf")
+        canvasYieldPsi2sPt.SaveAs("figures/psi2s_norm_yield_vs_pt.pdf")
 
         legendYieldJpsiY = TLegend(0.69, 0.69, 0.89, 0.89, " ", "brNDC")
         SetLegend(legendYieldJpsiY)
@@ -224,7 +226,7 @@ def main():
         histSystYieldJpsiY.Draw("E2 SAME")
         histStatYieldJpsiY.Draw("EP SAME")
         legendYieldJpsiY.Draw("SAME")
-        canvasYieldJpsiY.SaveAs("jpsi_norm_yield_vs_y.pdf")
+        canvasYieldJpsiY.SaveAs("figures/jpsi_norm_yield_vs_y.pdf")
 
         legendYieldPsi2sY = TLegend(0.69, 0.69, 0.89, 0.89, " ", "brNDC")
         SetLegend(legendYieldPsi2sY)
@@ -242,7 +244,7 @@ def main():
         histSystYieldPsi2sY.Draw("E2 SAME")
         histStatYieldPsi2sY.Draw("EP SAME")
         legendYieldPsi2sY.Draw("SAME")
-        canvasYieldPsi2sY.SaveAs("psi2s_norm_yield_vs_y.pdf")
+        canvasYieldPsi2sY.SaveAs("figures/psi2s_norm_yield_vs_y.pdf")
 
         ################################
         # Plot the Ratio Psi(2S) / J/psi
@@ -290,7 +292,7 @@ def main():
         graStatRatioYRun2.Draw("EP SAME")
         graSystRatioY.Draw("E2 SAME")
         graStatRatioY.Draw("EP SAME")
-        canvasRatioY.SaveAs("psi2s_over_jpsi_vs_y.pdf")
+        canvasRatioY.SaveAs("figures/psi2s_over_jpsi_vs_y.pdf")
 
         canvasRatioPt = TCanvas("canvasRatioPt", "canvasRatioPt", 800, 600)
         histGridRatioPt  = TH2F("histGridRatioPt", "", 100, 0, 20, 100, 0, 0.05)
@@ -299,7 +301,7 @@ def main():
         graStatRatioPtRun2.Draw("EP SAME")
         graSystRatioPt.Draw("E2 SAME")
         graStatRatioPt.Draw("EP SAME")
-        canvasRatioPt.SaveAs("psi2s_over_jpsi_vs_pt.pdf")
+        canvasRatioPt.SaveAs("figures/psi2s_over_jpsi_vs_pt.pdf")
 
 if __name__ == '__main__':
     main()
