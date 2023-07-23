@@ -1,13 +1,16 @@
 {
   "input": {
-    "input_file_name": "/Users/lucamicheletti/cernbox/JPSI/Run3/2022/apass4/LHC22o_medium/AnalysisResultsHistograms.root",
+    "input_file_name": "/Users/nicolasbize/alice/fresh-analysis/Analysis_Data/psi2sToJpsi/LHC22o_full_stat/differential_pT_y.root",
     "input_name": [
-        "hist_mass_y_all_histo_PairsMuonSEPM_matchedMchMid_y_2.50_2.75",
-        #"hist_mass_y_all_histo_PairsMuonSEPM_matchedMchMid_y_2.75_3.00",
-        #"hist_mass_y_all_histo_PairsMuonSEPM_matchedMchMid_y_3.00_3.25",
-        #"hist_mass_y_all_histo_PairsMuonSEPM_matchedMchMid_y_3.25_3.50",
-        #"hist_mass_y_all_histo_PairsMuonSEPM_matchedMchMid_y_3.50_3.75",
-        #"hist_mass_y_all_histo_PairsMuonSEPM_matchedMchMid_y_3.75_4.00",
+        # "pt_0_1",
+        # "pt_1_2",
+        # "pt_2_3",
+        # "pt_3_4",
+        # "pt_4_5",
+        # "pt_5_7",
+        # "pt_7_10",
+        # "pt_10_20",
+        "pT_y_integrated"
     ],
     "pdf_dictionary": {
       "pdf": ["NA60", "NA60", "VWG", "SUM"],
@@ -16,22 +19,23 @@
       "pdfNameForLegend": ["J/#psi", "Background", "Fit"],
       "pdfStyle": [1, 1, 2],
       "parVal": [
-        [3.096, 1.2e-01,  -1.0000e+00, 1.7325e-01, 1.0000e+00, 6.0226e-06, 2.1614e+00, 6.1800e-02, 1.3388e+00,  7.0872e-03],
-        [3.68, 1.5e-01,  -1.0000e+00, 1.7325e-01, 1.0000e+00, 6.0226e-06, 2.1614e+00, 6.1800e-02, 1.3388e+00,  7.0872e-03],
+        #[3.097, 1.2e-01,  -8.4264e-01, 1.5681e-01, 8.4235e-01, 2.5171e-03, 2.0054e+00, 3.4342e-02, 1.2939e+00,  7.5424e-03],
+        [3.096, 1.2e-01,  -8.2499e-01, 1.5782e-01, 1.0542e+00, 1.0037e-02, 1.9942e+00, 2.6443e-02, 5.2821e-01, 6.6852e-02],
+        [3.68, 1.5e-01,  -8.2499e-01, 1.5782e-01, 1.0542e+00, 1.0037e-02, 1.9942e+00, 2.6443e-02, 5.2821e-01, 6.6852e-02],
         [1, 1, 1],
-        [5000, 10, 100000]
+        [100000, 10000, 100000]
       ],
       "parLimMin": [
-        [2.9, 7.0e-02,  -1.0000e+00, 1.7325e-01, 1.0000e+00, 6.0226e-06, 2.1614e+00, 6.1800e-02, 1.3388e+00,  7.0872e-03],
-        [3.68, 7.0e-02,   -1.0000e+00, 1.7325e-01, 1.0000e+00, 6.0226e-06, 2.1614e+00, 6.1800e-02, 1.3388e+00,  7.0872e-03],
+        [2.9, 7.0e-02,  -8.2499e-01, 1.5782e-01, 1.0542e+00, 1.0037e-02, 1.9942e+00, 2.6443e-02, 5.2821e-01, 6.6852e-02],
+        [3.68, 7.0e-02,   -8.2499e-01, 1.5782e-01, 1.0542e+00, 1.0037e-02, 1.9942e+00, 2.6443e-02, 5.2821e-01, 6.6852e-02],
         [-10, 0, -100],
         [100, 0.1, 1000]
       ],
       "parLimMax": [
-        [3.5, 1.9e-01,   -1.0000e+00, 1.7325e-01, 1.0000e+00, 6.0226e-06, 2.1614e+00, 6.1800e-02, 1.3388e+00,  7.0872e-03],
-        [3.68, 1.9e-01,   -1.0000e+00, 1.7325e-01, 1.0000e+00, 6.0226e-06, 2.1614e+00, 6.1800e-02, 1.3388e+00,  7.0872e-03],
+        [3.5, 1.9e-01,   -8.2499e-01, 1.5782e-01, 1.0542e+00, 1.0037e-02, 1.9942e+00, 2.6443e-02, 5.2821e-01, 6.6852e-02],
+        [3.68, 1.9e-01,   -8.2499e-01, 1.5782e-01, 1.0542e+00, 1.0037e-02, 1.9942e+00, 2.6443e-02, 5.2821e-01, 6.6852e-02],
         [10, 100, 100],
-        [50000, 5000, 500000]
+        [5.e+5, 1.e+5, 1.e+7]
       ],
       "parName": [
         ["mean_Jpsi", "width_Jpsi", "alphaL_Jpsi", "p1L_Jpsi", "p2L_Jpsi", "p3L_Jpsi", "alphaR_Jpsi", "p1R_Jpsi", "p2R_Jpsi", "p3R_Jpsi"],
@@ -39,8 +43,10 @@
         ["aa", "bb", "cc"],
         ["sig_Jpsi", "sig_Psi2s", "bkg"]
       ],
-      "fitRangeMin": [2, 2.2, 2.4],
-      "fitRangeMax": [5, 4.8, 4.6],
+      # "fitRangeMin": [2, 2.2, 2.4],
+      # "fitRangeMax": [5, 4.8, 4.6],
+      "fitRangeMin": [2.1, 2.3, 2.5],
+      "fitRangeMax": [4.9, 4.7, 4.5],
       "fitMethod": "likelyhood",
       "doResidualPlot": true,
       "doPullPlot": true, 
@@ -56,14 +62,14 @@
     "analysis_dictionary": {
         "parName": ["mean_Jpsi", "width_Jpsi", "sig_Jpsi", "sig_Psi2s"],
         "input_name_pt": [
-        "output/analysis/LHC22o_medium_apass4_data_run3_tails/pt_0_1.root",
-        "output/analysis/LHC22o_medium_apass4_data_run3_tails/pt_1_2.root",
-        "output/analysis/LHC22o_medium_apass4_data_run3_tails/pt_2_3.root", 
-        "output/analysis/LHC22o_medium_apass4_data_run3_tails/pt_3_4.root", 
-        "output/analysis/LHC22o_medium_apass4_data_run3_tails/pt_4_5.root", 
-        "output/analysis/LHC22o_medium_apass4_data_run3_tails/pt_5_7.root", 
-        "output/analysis/LHC22o_medium_apass4_data_run3_tails/pt_7_10.root", 
-        "output/analysis/LHC22o_medium_apass4_data_run3_tails/pt_10_20.root", 
+        "output/analysis/LHC22o_full_stat_apass4_data_run3_tails/pt_0_1.root",
+        "output/analysis/LHC22o_full_stat_apass4_data_run3_tails/pt_1_2.root",
+        "output/analysis/LHC22o_full_stat_apass4_data_run3_tails/pt_2_3.root", 
+        "output/analysis/LHC22o_full_stat_apass4_data_run3_tails/pt_3_4.root", 
+        "output/analysis/LHC22o_full_stat_apass4_data_run3_tails/pt_4_5.root", 
+        "output/analysis/LHC22o_full_stat_apass4_data_run3_tails/pt_5_7.root", 
+        "output/analysis/LHC22o_full_stat_apass4_data_run3_tails/pt_7_10.root", 
+        "output/analysis/LHC22o_full_stat_apass4_data_run3_tails/pt_10_20.root", 
         ],
         "ptMin": [0., 1., 2., 3., 4.,5.,7.,10.],
         "ptMax": [1., 2., 3., 4., 5.,7.,10.,20.],
@@ -75,6 +81,6 @@
   },
   "output": {
     
-    "output_file_name": "output/analysis/LHC22o_medium_apass4_data_run3_tails/"
+    "output_file_name": "output/analysis/LHC22o_full_stat_apass4_data_run3_tails/"
   }
 }

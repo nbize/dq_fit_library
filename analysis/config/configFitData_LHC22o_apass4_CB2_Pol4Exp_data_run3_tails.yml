@@ -1,14 +1,17 @@
 {
     "input": {
-      "input_file_name": "/Users/lucamicheletti/cernbox/JPSI/Run3/2022/apass4/LHC22o_medium/AnalysisResultsHistograms.root",
-      "input_name": [
-        "hist_mass_y_all_histo_PairsMuonSEPM_matchedMchMid_y_2.50_2.75",
-        "hist_mass_y_all_histo_PairsMuonSEPM_matchedMchMid_y_2.75_3.00",
-        "hist_mass_y_all_histo_PairsMuonSEPM_matchedMchMid_y_3.00_3.25",
-        "hist_mass_y_all_histo_PairsMuonSEPM_matchedMchMid_y_3.25_3.50",
-        "hist_mass_y_all_histo_PairsMuonSEPM_matchedMchMid_y_3.50_3.75",
-        "hist_mass_y_all_histo_PairsMuonSEPM_matchedMchMid_y_3.75_4.00",
-      ],
+      "input_file_name": "/Users/nicolasbize/alice/fresh-analysis/Analysis_Data/psi2sToJpsi/LHC22o_full_stat/differential_pT_y.root",
+    "input_name": [
+        # "pt_0_1",
+        # "pt_1_2",
+        # "pt_2_3",
+        # "pt_3_4",
+        # "pt_4_5",
+        # "pt_5_7",
+        # "pt_7_10",
+        # "pt_10_20",
+        "pT_y_integrated"
+    ],
       "pdf_dictionary": {
         "pdf": ["CB2", "CB2", "Pol4Exp", "SUM"],
         "pdfName": ["Jpsi", "Psi2s", "Bkg", "SUM"],
@@ -16,22 +19,22 @@
         "pdfNameForLegend": ["J/#psi", "#psi(2S)","Background", "Fit"],
         "pdfStyle": [1, 1, 2],
         "parVal": [
-          [3.096, 0.8e-01, 1.1407, 4.6530, 2.2905, 5.3774e-01],
-          [3.68, 0.8e-01, 1.1407, 4.6530, 2.2905, 5.3774e-01],
-          [1, 1, 1, 1, 1, 2],
-          [20000, 0.1, 100000]
+          [3.097, 1.2e-01, 1.2105, 1.5571, 2.0536, 1.3544],
+          [3.68, 1.5e-01, 1.2105, 1.5571, 2.0536, 1.3544],
+          [1, 1, 1, 1, 2, 10],
+          [100000, 10000, 100000]
         ],
         "parLimMin": [
-          [2.9, 7.0e-02, 1.1407, 4.6530, 2.2905, 5.3774e-01],
-          [3.2, 7.0e-02, 1.1407, 4.6530, 2.2905, 5.3774e-01],
+          [2.9, 7.0e-02, 1.2105, 1.5571, 2.0536, 1.3544],
+          [3.2, 7.0e-02, 1.2105, 1.5571, 2.0536, 1.3544],
           [0, 0, 0, 0, 0, 0],
-          [0, 0, 0]
+          [100, 0.1, 1000]
         ],
         "parLimMax": [
-          [3.5, 1.9e-01, 1.1407, 4.6530, 2.2905, 5.3774e-01],
-          [3.9, 1.9e-01, 1.1407, 4.6530, 2.2905, 5.3774e-01],
+          [3.5, 1.9e-01, 1.2105, 1.5571, 2.0536, 1.3544],
+          [3.9, 1.9e-01, 1.2105, 1.5571, 2.0536, 1.3544],
           [100, 100, 100, 100, 100, 100],
-          [50000, 500, 5000000]
+          [3.e+6, 5.e+4, 1.e+7]
         ],
         "parName": [
           ["mean_Jpsi", "width_Jpsi", "a_Jpsi", "b_Jpsi", "c_Jpsi", "d_Jpsi"],
@@ -39,10 +42,10 @@
           ["aa", "bb", "cc","dd", "ee", "ff"],
           ["sig_Jpsi", "sig_Psi2s", "bkg"]
         ],
-        "fitRangeMin": [2, 2.2, 2.4],
-        "fitRangeMax": [5, 4.8, 4.6],
-        #"fitRangeMin": [2, 2.4],
-        #"fitRangeMax": [5, 4.6],
+        # "fitRangeMin": [2, 2.2, 2.4],
+      # "fitRangeMax": [5, 4.8, 4.6],
+      "fitRangeMin": [2.1, 2.3, 2.5],
+      "fitRangeMax": [4.9, 4.7, 4.5],
         "fitMethod": "likelyhood",
         "doResidualPlot": true,
         "doPullPlot": true, 
@@ -58,19 +61,25 @@
       "analysis_dictionary": {
         "parName": ["mean_Jpsi", "width_Jpsi", "sig_Jpsi", "sig_Psi2s"],
         "input_name_pt": [
-        "output/analysis/LHC22o_medium_apass4_data_run3_tails/hist_mass_pt_all_histo_PairsMuonSEPM_matchedMchMid_pt_0_1__2_5.root",
-        "output/analysis/LHC22o_medium_apass4_data_run3_tails/hist_mass_pt_all_histo_PairsMuonSEPM_matchedMchMid_pt_1_2__2_5.root",
+        "output/analysis/LHC22o_full_stat_apass4_data_run3_tails/pt_0_1.root",
+        "output/analysis/LHC22o_full_stat_apass4_data_run3_tails/pt_1_2.root",
+        "output/analysis/LHC22o_full_stat_apass4_data_run3_tails/pt_2_3.root", 
+        "output/analysis/LHC22o_full_stat_apass4_data_run3_tails/pt_3_4.root", 
+        "output/analysis/LHC22o_full_stat_apass4_data_run3_tails/pt_4_5.root", 
+        "output/analysis/LHC22o_full_stat_apass4_data_run3_tails/pt_5_7.root", 
+        "output/analysis/LHC22o_full_stat_apass4_data_run3_tails/pt_7_10.root", 
+        "output/analysis/LHC22o_full_stat_apass4_data_run3_tails/pt_10_20.root", 
         ],
-        "ptMin": [0., 1., 2., 3., 4.],
-        "ptMax": [1., 2., 3., 4., 5.],
-        "input_name_y": [
-        "output/analysis/LHC22o_medium_apass4_data_run3_tails/hist_mass_y_all_histo_PairsMuonSEPM_matchedMchMid_y_2.50_2.75__2_5.root",
-        ],
-        "yMin": [2.50],
-        "yMax": [2.75],
+        "ptMin": [0., 1., 2., 3., 4.,5.,7.,10.],
+        "ptMax": [1., 2., 3., 4., 5.,7.,10.,20.],
+        # "input_name_y": [
+        # ],
+        # "yMin": [2.50],
+        # "yMax": [2.75],
       }
-    },
-    "output": {
-      "output_file_name": "output/analysis/LHC22o_medium_apass4_data_run3_tails/"
-    }
+  },
+  "output": {
+    
+    "output_file_name": "output/analysis/LHC22o_full_stat_apass4_data_run3_tails/"
   }
+}

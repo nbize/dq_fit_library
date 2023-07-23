@@ -1,35 +1,33 @@
 {
     "input": {
-      "input_file_name": "/Users/nicolasbize/alice/fresh-analysis/Analysis_Data/psi2sToJpsi/LHC22o_full_stat/differential_pT_y.root",
-    "input_name": ["pT_y_integrated"],
+      "input_file_name": "/Users/nicolasbize/alice/fresh-analysis/Analysis_Data/psi2sToJpsi/LHC21i3d2/MC_signal.root",
+    "input_name": [
+      "non_prompt_jpsi_mass"
+      ],
       "pdf_dictionary": {
-        "pdf": ["CB2", "VWG", "SUM"],
-        "pdfName": ["Jpsi", "Bkg", "SUM"],
+        "pdf": ["CB2", "SUM"],
+        "pdfName": ["Jpsi", "SUM"],
         "pdfColor": [861, 1],
-        "pdfNameForLegend": ["J/#psi","Background", "Fit"],
+        "pdfNameForLegend": ["J/#psi", "Fit"],
         "pdfStyle": [1, 2],
         "parVal": [
-          [3.096, 0.8e-01, 1.089, 3.393, 2.097, 8.694],
-          [1, 1, 1],
-          [10000, 1000000]
+          [3.095, 0.8e-01, 1.089, 3.393, 2.097, 8.694],
+          [10000]
         ],
         "parLimMin": [
           [2.9, 7.0e-02, 0, 0, 0, 0],
-          [-10, 0, -100],
-          [100, 1000]
+          [0]
         ],
         "parLimMax": [
-          [3.5, 1.9e-01, 5, 5, 5, 15],
-          [10, 100, 100],
-          [5.e+6, 5.e+7]
+          [3.5, 1.5e-01, 5, 5, 5, 15],
+          [5.e+6]
         ],
         "parName": [
           ["mean_Jpsi", "width_Jpsi", "a_Jpsi", "b_Jpsi", "c_Jpsi", "d_Jpsi"],
-          ["aa", "bb", "cc"],
-          ["sig_Jpsi", "bkg"]
+          ["sig_Jpsi"]
         ],
-        "fitRangeMin": [2, 2.1, 2.3, 2.5],
-        "fitRangeMax": [5, 4.9, 4.7, 4.5],
+        "fitRangeMin": [2],
+        "fitRangeMax": [5],
         "fitMethod": "likelyhood",
         "doResidualPlot": true,
         "doPullPlot": true, 
@@ -38,7 +36,7 @@
         "parForAlicePlot": ["mean_Jpsi", "width_Jpsi", "sig_Jpsi"],
         "parNameForAlicePlot": ["#mu_{J/#psi}", "#sigma_{J/#psi}", "#it{N}_{J/#psi}"],
         "text": [
-          [0.20, 0.87, "LHC22o CB2+VWG, #sqrt{#it{s}} = 13.6 TeV"], 
+          [0.20, 0.87, "LHC22o CB2, #sqrt{#it{s}} = 13.6 TeV"], 
           [0.20, 0.80, "2.5 < #it{y} < 4, J/#psi #rightarrow #mu^{+}#mu^{-}"]
         ]
       },
@@ -68,6 +66,6 @@
       }
     },
     "output": {
-      "output_file_name": "output/analysis/LHC22o_full_stat_apass4_tails_extraction/"
+      "output_file_name": "output/analysis/MC_tails_extraction/"
     }
   }

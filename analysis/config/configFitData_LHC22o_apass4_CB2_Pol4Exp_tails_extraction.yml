@@ -2,59 +2,47 @@
     "input": {
       "input_file_name": "/Users/nicolasbize/alice/fresh-analysis/Analysis_Data/psi2sToJpsi/LHC22o_full_stat/differential_pT_y.root",
     "input_name": [
-        #"pt_0_1",
-        #"pt_1_2",
-        # "pt_2_3",
-        #"pt_3_4",
-        # "pt_4_5",
-        #"pt_5_7",
-        # "pt_7_10",
-        # "pt_10_20",
         "pT_y_integrated"
     ],
       "pdf_dictionary": {
-        "pdf": ["CB2", "CB2", "VWG", "SUM"],
-        "pdfName": ["Jpsi", "Psi2s", "Bkg", "SUM"],
+        "pdf": ["CB2", "Pol4Exp", "SUM"],
+        "pdfName": ["Jpsi", "Bkg", "SUM"],
         "pdfColor": [861, 417, 1],
-        "pdfNameForLegend": ["J/#psi", "#psi(2S)","Background", "Fit"],
-        "pdfStyle": [1, 1, 2],
+        "pdfNameForLegend": ["J/#psi","Background", "Fit"],
+        "pdfStyle": [1, 2],
         "parVal": [
-          [3.096, 1.2e-01, 1.2105, 1.5571, 2.0536, 1.3544],
-          [3.68, 1.5e-01, 1.2105, 1.5571, 2.0536, 1.3544],
-          [1, 1, 1],
-          [100000, 1000, 100000]
+          [3.097, 1.2e-01, 1.2105, 1.5571, 2.0536, 1.3544],
+          [1, 1, 1, 1, 2, 10],
+          [100000, 100000]
         ],
         "parLimMin": [
           [2.9, 7.0e-02, 1.2105, 1.5571, 2.0536, 1.3544],
-          [3.2, 7.0e-02, 1.2105, 1.5571, 2.0536, 1.3544],
-          [-10, 0, -100],
-          [10, 0, 1000]
+          [0, 0, 0, 0, 0, 0],
+          [100, 1000]
         ],
         "parLimMax": [
-          [3.5, 1.5e-01, 1.2105, 1.5571, 2.0536, 1.3544],
-          [3.9, 1.9e-01, 1.2105, 1.5571, 2.0536, 1.3544],
-          [10, 100, 100],
-          [1.e+5, 1.e+4, 5.e+5]
+          [3.5, 1.9e-01, 1.2105, 1.5571, 2.0536, 1.3544],
+          [100, 100, 100, 100, 100, 100],
+          [3.e+6, 1.e+7]
         ],
         "parName": [
           ["mean_Jpsi", "width_Jpsi", "a_Jpsi", "b_Jpsi", "c_Jpsi", "d_Jpsi"],
-          ["sum::mean_Psi2s(mean_Jpsi,0.584)", "prod::width_Psi2s(width_Jpsi,1.05)", "a_Psi2s", "b_Psi2s", "c_Psi2s", "d_Psi2s"],
-          ["aa", "bb", "cc"],
-          ["sig_Jpsi", "sig_Psi2s", "bkg"]
+          ["aa", "bb", "cc","dd", "ee", "ff"],
+          ["sig_Jpsi", "bkg"]
         ],
-        # "fitRangeMin": [2, 2.2, 2.4],
-      # "fitRangeMax": [5, 4.8, 4.6],
-      "fitRangeMin": [2.1, 2.3, 2.5],
-      "fitRangeMax": [4.9, 4.7, 4.5],
+        "fitRangeMin": [2, 2.2, 2.4],
+        "fitRangeMax": [5, 4.8, 4.6],
+        #"fitRangeMin": [2, 2.4],
+        #"fitRangeMax": [5, 4.6],
         "fitMethod": "likelyhood",
-        "doResidualPlot": true,
-        "doPullPlot": true, 
-        "doCorrMatPlot": true,
-        "doAlicePlot": true,
-        "parForAlicePlot": ["mean_Jpsi", "width_Jpsi", "sig_Jpsi", "sig_Psi2s"],
-        "parNameForAlicePlot": ["#mu_{J/#psi}", "#sigma_{J/#psi}", "#it{N}_{J/#psi}", "#it{N}_{#psi(2S)}"],
+        "doResidualPlot": True,
+        "doPullPlot": True, 
+        "doCorrMatPlot": True,
+        "doAlicePlot": True,
+        "parForAlicePlot": ["mean_Jpsi", "width_Jpsi", "sig_Jpsi"],
+        "parNameForAlicePlot": ["#mu_{J/#psi}", "#sigma_{J/#psi}", "#it{N}_{J/#psi}"],
         "text": [
-          [0.20, 0.87, "LHC22o CB2+VWG, #sqrt{#it{s}} = 13.6 TeV"], 
+          [0.20, 0.87, "LHC22o CB2+Pol4Exp, #sqrt{#it{s}} = 13.6 TeV"], 
           [0.20, 0.80, "2.5 < #it{y} < 4, J/#psi #rightarrow #mu^{+}#mu^{-}"]
         ]
       },
