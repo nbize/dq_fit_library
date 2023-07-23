@@ -1,7 +1,9 @@
 {
   "input": {
-    "input_file_name": "/Users/nicolasbize/alice/fresh-analysis/Analysis_Data/psi2sToJpsi/LHC22o_full_stat/differential_pT_y.root",
-    "input_name": ["pT_y_integrated"],
+    # "input_file_name": "/Users/nicolasbize/alice/fresh-analysis/Analysis_Data/psi2sToJpsi/LHC22o_full_stat/differential_pT_y.root",
+    # "input_name": ["pT_y_integrated"],
+    "input_file_name": "/Users/nicolasbize/alice/fresh-analysis/Analysis_Data/psi2sToJpsi/LHC22o_full_stat/cut_studies/AnalysisResultsHistograms.root",
+    "input_name": ["histMassDimu__MuonPtCut_1.0"],
     "pdf_dictionary": {
       "pdf": ["NA60", "NA60", "VWG", "SUM"],
       "pdfName": ["Jpsi", "Psi2s", "Bkg", "SUM"],
